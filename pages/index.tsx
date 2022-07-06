@@ -1,8 +1,13 @@
-import { Typography } from '@mui/material';
 import type { NextPage } from 'next';
+import { Layout } from '../components/layouts';
+import { Typography } from '@mui/material';
 
 const HomePage: NextPage = () => {
-  return <Typography variant="h1">hello word</Typography>;
+  return (
+    <Layout title="OpenJira">
+      <Typography variant="h1">Hello</Typography>
+    </Layout>
+  );
 };
 
 export default HomePage;

@@ -7,5 +7,13 @@ export const lightTheme = createTheme({
     background: {
       default: grey[300]
     }
+  },
+  components: {
+    MuiAppBar: {
+      defaultProps: {
+        elevation: 0
+      },
+      styleOverrides: {}
+    }
   }
 });
