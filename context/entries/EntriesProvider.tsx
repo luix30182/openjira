@@ -1,7 +1,8 @@
-import { FC, useReducer } from 'react';
+import { FC, useEffect, useReducer } from 'react';
 import { EntriesContext, entriesReducer } from './';
 import { Entry } from '../../interfaces';
 import { v4 as uuidv4 } from 'uuid';
+import { entriesapi } from '../../apis';
 
 export interface EntriesState {
   entries: Entry[];
@@ -13,6 +14,15 @@ const Entries_INITIAL_STATE: EntriesState = {
 
 export const EntriesProvider: FC = ({ children }) => {
   const [state, dispatch] = useReducer(entriesReducer, Entries_INITIAL_STATE);
+
+  const refreshEntries = async () => {
+    const { data } = await entriesapi.get<Entry[]>('/entries');
+    dispatch({ type: '[Entry] - Refresh-data', payload: data });
+  };
+
+  useEffect(() => {
+    refreshEntries();
+  }, []);
 
   const addNewEntry = (description: string) => {
     const newEntry: Entry = {
