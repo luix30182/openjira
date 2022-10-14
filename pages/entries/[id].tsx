@@ -19,8 +19,9 @@ import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { Layout } from '../../components/layouts';
 import { Entry, Entry, EntryStatus } from '../../interfaces/entry';
-import { ChangeEvent, useMemo, useState, FC } from 'react';
+import { ChangeEvent, useMemo, useState, FC, useContext } from 'react';
 import { dbEntries } from '../../database';
+import { EntriesContext } from '../../context/entries';
 
 const validStatus: Array<EntryStatus> = ['pending', 'in-progess', 'finished'];
 
@@ -32,6 +33,8 @@ export const EntryPage: FC<Props> = ({ entry }) => {
   const [inputValue, setInputValue] = useState(entry.description);
   const [status, setStatus] = useState<EntryStatus>(entry.status);
   const [touched, setTouched] = useState(false);
+
+  const { updateEntry } = useContext(EntriesContext);
 
   const isNotValid = useMemo(
     () => inputValue.length <= 0 && touched,
@@ -47,7 +50,15 @@ export const EntryPage: FC<Props> = ({ entry }) => {
   };
 
   const onSave = () => {
-    console.log(inputValue, status);
+    if (inputValue.trim().length === 0) return;
+
+    const updatedEntry: Entry = {
+      ...entry,
+      status,
+      description: inputValue
+    };
+
+    updateEntry(updatedEntry, true);
   };
 
   return (
